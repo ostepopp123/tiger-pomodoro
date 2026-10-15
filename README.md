@@ -7,6 +7,10 @@
 
 An adorable, lightweight, standalone desktop Pomodoro timer featuring **5 cozy Pixel Art companions** (Tiger, Hippo, Pig, Guinea Pig, and Avocado). Built as a frameless desk companion widget with procedural animations, custom duration controls (HH:MM:SS), customizable retro soundscapes, multi-language support (English & Norsk), and an **Always-on-Top (📌)** floating pin.
 
+<p align="center">
+  <img src="assets/screenshot.png" alt="Tiger & Friends Pomodoro Screenshot" width="340" />
+</p>
+
 ---
 
 ## ✨ Features / Funksjoner

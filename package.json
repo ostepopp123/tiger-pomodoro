@@ -20,6 +20,10 @@
   ],
   "author": "Tiger Pomodoro Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ostepopp123/tiger-pomodoro.git"
+  },
   "devDependencies": {
     "electron": "^44.7.2",
     "electron-builder": "^26.15.3"
