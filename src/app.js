@@ -1,42 +1,57 @@
 /**
- * Tiger & Friends Pomodoro Application Controller
- * Connects the UI, Companions (Tiger, Hippo, Pig, Guinea Pig, Avocado),
- * Procedural Sound Engine, Pomodoro timer, and Multi-Language (i18n) Engine.
+ * ============================================================================
+ * TIGER & FRIENDS POMODORO - RENDERER APPLICATION CONTROLLER
+ * ============================================================================
+ * Orchestrates all application modules:
+ * 1. UI Interaction & Frameless Window Controls
+ * 2. 5 Animated Pixel Companions (Tiger, Hippo, Pig, Guinea Pig, Avocado)
+ * 3. Procedural Alert Synthesizer & Procedural Ambient Soundscapes (Rain, Fire, Wind, Cafe)
+ * 4. Precision Pomodoro Countdown & Preset Engine
+ * 5. Gamification / Tamagotchi Engine (XP, Levels 1-5, Streaks, Hats, Hydration, Tasks)
+ * 6. Multi-Language (i18n) Engine (Norwegian & English)
+ * 7. Ultra-Compact Floating Mini-Widget Mode (240x72px)
+ * 
+ * Written cleanly with thorough comments for easy maintenance and expansion.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Elements
+  // --------------------------------------------------------------------------
+  // DOM ELEMENT SELECTIONS
+  // --------------------------------------------------------------------------
+
+  // Title Bar & Window Action Controls
+  const titleIcon = document.getElementById('titleIcon');
+  const titleText = document.getElementById('titleText');
+  const pinBtn = document.getElementById('pinBtn');
+  const soundBtn = document.getElementById('soundBtn');
+  const btnMiniMode = document.getElementById('btnMiniMode');
+  const settingsBtn = document.getElementById('settingsBtn');
+  const minBtn = document.getElementById('minBtn');
+  const closeBtn = document.getElementById('closeBtn');
+
+  // Mini-Widget Controls (Visible only in compact 240x72 mode)
+  const miniControlsCluster = document.getElementById('miniControlsCluster');
+  const btnMiniToggle = document.getElementById('btnMiniToggle');
+  const btnMiniExpand = document.getElementById('btnMiniExpand');
+
+  // Quick Skin Switcher Bar
+  const quickSkinButtons = document.querySelectorAll('.skin-btn');
+  const btnNameTiger = document.getElementById('btnNameTiger');
+  const btnNameHippo = document.getElementById('btnNameHippo');
+  const btnNamePig = document.getElementById('btnNamePig');
+  const btnNameGuineaPig = document.getElementById('btnNameGuineaPig');
+  const btnNameAvocado = document.getElementById('btnNameAvocado');
+
+  // Mini Focus Task Banner
+  const taskBanner = document.getElementById('taskBanner');
+  const taskInput = document.getElementById('taskInput');
+  const btnTaskDone = document.getElementById('btnTaskDone');
+
+  // Companion Stage & Canvas
   const canvas = document.getElementById('tigerCanvas');
-  const timerDigits = document.getElementById('timerDigits');
-  const progressBar = document.getElementById('progressBar');
   const speechBubble = document.getElementById('speechBubble');
   const speechIcon = document.getElementById('speechIcon');
   const speechText = document.getElementById('speechText');
-
-  const titleIcon = document.getElementById('titleIcon');
-  const titleText = document.getElementById('titleText');
-
-  const btnToggle = document.getElementById('btnToggle');
-  const btnToggleIcon = document.getElementById('btnToggleIcon');
-  const btnToggleText = document.getElementById('btnToggleText');
-  const btnReset = document.getElementById('btnReset');
-  const btnSkip = document.getElementById('btnSkip');
-
-  const presetButtons = document.querySelectorAll('.preset-btn');
-  const presetFocusBtn = document.getElementById('presetFocusBtn');
-  const presetShortBtn = document.getElementById('presetShortBtn');
-  const presetLongBtn = document.getElementById('presetLongBtn');
-  const presetDeepBtn = document.getElementById('presetDeepBtn');
-
-  const inputHours = document.getElementById('inputHours');
-  const inputMinutes = document.getElementById('inputMinutes');
-  const inputSeconds = document.getElementById('inputSeconds');
-  const btnSetCustom = document.getElementById('btnSetCustom');
-  const lblCustomTime = document.getElementById('lblCustomTime');
-  const lblUnitHour = document.getElementById('lblUnitHour');
-  const lblUnitMin = document.getElementById('lblUnitMin');
-  const lblUnitSec = document.getElementById('lblUnitSec');
-
   const pawElements = [
     document.getElementById('paw0'),
     document.getElementById('paw1'),
@@ -44,43 +59,60 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('paw3')
   ];
   const sessionLabel = document.getElementById('sessionLabel');
+
+  // Gamification & Progression Bar
+  const gamificationBar = document.getElementById('gamificationBar');
+  const levelBadge = document.getElementById('levelBadge');
+  const xpBarFill = document.getElementById('xpBarFill');
+  const xpText = document.getElementById('xpText');
+  const streakBadge = document.getElementById('streakBadge');
+  const streakCount = document.getElementById('streakCount');
+
+  // Timer Digital Display
+  const timerDigits = document.getElementById('timerDigits');
+  const progressBar = document.getElementById('progressBar');
+
+  // Preset Buttons
+  const presetButtons = document.querySelectorAll('.preset-btn');
+  const presetFocusBtn = document.getElementById('presetFocusBtn');
+  const presetShortBtn = document.getElementById('presetShortBtn');
+  const presetLongBtn = document.getElementById('presetLongBtn');
+  const presetDeepBtn = document.getElementById('presetDeepBtn');
+
+  // Manual Custom Time Inputs (HH:MM:SS)
+  const lblCustomTime = document.getElementById('lblCustomTime');
+  const inputHours = document.getElementById('inputHours');
+  const inputMinutes = document.getElementById('inputMinutes');
+  const inputSeconds = document.getElementById('inputSeconds');
+  const lblUnitHour = document.getElementById('lblUnitHour');
+  const lblUnitMin = document.getElementById('lblUnitMin');
+  const lblUnitSec = document.getElementById('lblUnitSec');
+  const btnSetCustom = document.getElementById('btnSetCustom');
+
+  // Main Timer Action Controls
+  const btnReset = document.getElementById('btnReset');
+  const btnToggle = document.getElementById('btnToggle');
+  const btnToggleIcon = document.getElementById('btnToggleIcon');
+  const btnToggleText = document.getElementById('btnToggleText');
+  const btnSkip = document.getElementById('btnSkip');
+
+  // Footer & Hints
   const lblPetHint = document.getElementById('lblPetHint');
-
-  const pinBtn = document.getElementById('pinBtn');
-  const soundBtn = document.getElementById('soundBtn');
-  const settingsBtn = document.getElementById('settingsBtn');
-  const minBtn = document.getElementById('minBtn');
-  const closeBtn = document.getElementById('closeBtn');
   const btnSoundTest = document.getElementById('btnSoundTest');
-
-  // Skin Elements
-  const quickSkinButtons = document.querySelectorAll('.skin-btn');
-  const modalSkinCards = document.querySelectorAll('.modal-skin-card');
 
   // Settings Modal Elements
   const settingsModal = document.getElementById('settingsModal');
   const btnCloseSettings = document.getElementById('btnCloseSettings');
   const btnDoneSettings = document.getElementById('btnDoneSettings');
-  const selectSound = document.getElementById('selectSound');
-  const btnPreviewSound = document.getElementById('btnPreviewSound');
-  const sliderVolume = document.getElementById('sliderVolume');
-  const lblVolumePercent = document.getElementById('lblVolumePercent');
-
   const lblSettingsTitle = document.getElementById('lblSettingsTitle');
+
+  // Language Section
   const lblLangSectionTitle = document.getElementById('lblLangSectionTitle');
-  const lblSkinSectionTitle = document.getElementById('lblSkinSectionTitle');
-  const lblSoundSectionTitle = document.getElementById('lblSoundSectionTitle');
-  const lblVolumeSectionTitle = document.getElementById('lblVolumeSectionTitle');
   const langButtons = document.querySelectorAll('.lang-btn');
 
-  // Quick skin button labels
-  const btnNameTiger = document.getElementById('btnNameTiger');
-  const btnNameHippo = document.getElementById('btnNameHippo');
-  const btnNamePig = document.getElementById('btnNamePig');
-  const btnNameGuineaPig = document.getElementById('btnNameGuineaPig');
-  const btnNameAvocado = document.getElementById('btnNameAvocado');
-
-  // Modal card labels
+  // Skin Modal Section
+  const lblSkinSectionTitle = document.getElementById('lblSkinSectionTitle');
+  const modalSkinCards = document.querySelectorAll('.modal-skin-card');
   const cardTitleTiger = document.getElementById('cardTitleTiger');
   const cardDescTiger = document.getElementById('cardDescTiger');
   const cardTitleHippo = document.getElementById('cardTitleHippo');
@@ -92,7 +124,48 @@ document.addEventListener('DOMContentLoaded', () => {
   const cardTitleAvocado = document.getElementById('cardTitleAvocado');
   const cardDescAvocado = document.getElementById('cardDescAvocado');
 
-  // Initialize Engines
+  // Room Theme Section
+  const lblThemeSectionTitle = document.getElementById('lblThemeSectionTitle');
+  const themeButtons = document.querySelectorAll('.theme-btn');
+  const btnThemeCozy = document.getElementById('btnThemeCozy');
+  const btnThemeNight = document.getElementById('btnThemeNight');
+  const btnThemeSakura = document.getElementById('btnThemeSakura');
+  const btnThemeOasis = document.getElementById('btnThemeOasis');
+
+  // Hats & Accessories Section
+  const lblHatSectionTitle = document.getElementById('lblHatSectionTitle');
+  const hatCards = document.querySelectorAll('.hat-card');
+  const hatNameNone = document.getElementById('hatNameNone');
+  const hatNameCrown = document.getElementById('hatNameCrown');
+  const hatNameWizard = document.getElementById('hatNameWizard');
+  const hatNameSunglasses = document.getElementById('hatNameSunglasses');
+  const hatNameFlowers = document.getElementById('hatNameFlowers');
+  const hatNameBow = document.getElementById('hatNameBow');
+  const lockCrown = document.getElementById('lockCrown');
+  const lockWizard = document.getElementById('lockWizard');
+  const lockSunglasses = document.getElementById('lockSunglasses');
+  const lockFlowers = document.getElementById('lockFlowers');
+  const lockBow = document.getElementById('lockBow');
+
+  // Sound Alerts Section
+  const lblSoundSectionTitle = document.getElementById('lblSoundSectionTitle');
+  const selectSound = document.getElementById('selectSound');
+  const btnPreviewSound = document.getElementById('btnPreviewSound');
+
+  // Procedural Ambient Soundscapes Section
+  const lblAmbientSectionTitle = document.getElementById('lblAmbientSectionTitle');
+  const selectAmbient = document.getElementById('selectAmbient');
+  const sliderAmbientVolume = document.getElementById('sliderAmbientVolume');
+  const lblAmbientVolumePercent = document.getElementById('lblAmbientVolumePercent');
+
+  // Main Volume Section
+  const lblVolumeSectionTitle = document.getElementById('lblVolumeSectionTitle');
+  const sliderVolume = document.getElementById('sliderVolume');
+  const lblVolumePercent = document.getElementById('lblVolumePercent');
+
+  // --------------------------------------------------------------------------
+  // INITIALIZE CORE ENGINES
+  // --------------------------------------------------------------------------
   const i18n = new I18nManager();
   const tiger = new PixelTiger(canvas);
   const sound = new SoundEngine();
@@ -141,16 +214,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Set active skin from saved state
-  const initialSkin = tiger.getSkin() || 'tiger';
+  // Gamification Engine Initialization
+  const game = new GamificationEngine({
+    onXPChange: (levelData) => {
+      updateGamificationUI(levelData);
+      updateHatsUI();
+    },
+    onLevelUp: (levelData) => {
+      handleLevelUp(levelData);
+    },
+    onUnlock: (hatId) => {
+      handleHatUnlock(hatId);
+    }
+  });
 
-  // Set active sound & volume in UI from sound engine
-  selectSound.value = sound.currentSound || 'chime';
-  sliderVolume.value = Math.round(sound.volume * 100);
-  lblVolumePercent.textContent = `${sliderVolume.value}%`;
-  soundBtn.textContent = sound.isMuted ? '🔇' : '🔔';
-
-  // Initialize Timer
+  // Pomodoro Countdown Timer Initialization
   const timer = new PomodoroTimer({
     onTick: (timeData) => {
       updateTimerDisplay(timeData);
@@ -163,7 +241,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- LANGUAGE SWITCHING (i18n) ---
+  // Mini-Widget Mode state
+  let isMiniMode = false;
+
+  // --------------------------------------------------------------------------
+  // INITIAL STATE SYNC & PREFERENCES
+  // --------------------------------------------------------------------------
+
+  // Initial Skin
+  const initialSkin = tiger.getSkin() || 'tiger';
+
+  // Initial Hat & Room Theme from Gamification Engine
+  tiger.setHat(game.equippedHat || 'none');
+  applyTheme(game.roomTheme || 'cozy', false);
+
+  // Initial Focus Task
+  if (game.currentTask) {
+    taskInput.value = game.currentTask;
+    btnTaskDone.classList.add('visible');
+  }
+
+  // Initial Sound Dropdown & Volume
+  selectSound.value = sound.currentSound || 'chime';
+  sliderVolume.value = Math.round(sound.volume * 100);
+  lblVolumePercent.textContent = `${sliderVolume.value}%`;
+  soundBtn.textContent = sound.isMuted ? '🔇' : '🔔';
+
+  // Initial Ambient Sound Dropdown & Volume
+  selectAmbient.value = sound.ambientType || 'none';
+  const initAmbVol = sound.ambientVolume !== undefined ? Math.round(sound.ambientVolume * 100) : 40;
+  sliderAmbientVolume.value = initAmbVol;
+  lblAmbientVolumePercent.textContent = `${initAmbVol}%`;
+
+  // Petting listener connects to Tamagotchi gamification
+  tiger.onPet = () => {
+    game.recordPet();
+    updateHatsUI();
+  };
+
+  // --------------------------------------------------------------------------
+  // LANGUAGE SWITCHING & LOCALIZATION
+  // --------------------------------------------------------------------------
   function applyLanguage(lang) {
     i18n.setLang(lang);
     document.documentElement.lang = lang;
@@ -173,12 +291,17 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
     });
 
-    // Update Window Tooltips
+    // Update Window Title Bar Tooltips
     pinBtn.title = i18n.t('pinTitle');
     soundBtn.title = i18n.t('soundToggle');
+    btnMiniMode.title = isMiniMode ? i18n.t('fullModeTitle') : i18n.t('miniModeTitle');
     settingsBtn.title = i18n.t('settingsTitle');
     minBtn.title = i18n.t('minimizeTitle');
     closeBtn.title = i18n.t('closeTitle');
+
+    // Update Mini Widget Buttons Tooltips
+    btnMiniToggle.title = timer.isRunning ? i18n.t('btnPause') : i18n.t('btnStart');
+    btnMiniExpand.title = i18n.t('fullModeTitle');
 
     // Update Presets HTML
     presetFocusBtn.innerHTML = i18n.t('presetFocus');
@@ -186,14 +309,14 @@ document.addEventListener('DOMContentLoaded', () => {
     presetLongBtn.innerHTML = i18n.t('presetLong');
     presetDeepBtn.innerHTML = i18n.t('presetDeep');
 
-    // Update Custom Time Labels
+    // Update Custom Time Inputs
     lblCustomTime.textContent = i18n.t('customLabel');
     lblUnitHour.textContent = i18n.t('unitHour');
     lblUnitMin.textContent = i18n.t('unitMin');
     lblUnitSec.textContent = i18n.t('unitSec');
     btnSetCustom.textContent = i18n.t('btnSet');
 
-    // Update Controls Tooltips & Text
+    // Update Controls Text & Tooltips
     btnReset.title = i18n.t('btnResetTitle');
     btnSkip.title = i18n.t('btnSkipTitle');
     btnToggleText.textContent = timer.isRunning ? i18n.t('btnPause') : i18n.t('btnStart');
@@ -202,21 +325,42 @@ document.addEventListener('DOMContentLoaded', () => {
     lblPetHint.textContent = i18n.t('petHint');
     btnSoundTest.textContent = i18n.t('testSoundLink');
 
+    // Update Task Banner
+    taskInput.placeholder = i18n.t('taskPlaceholder');
+    btnTaskDone.textContent = i18n.t('taskDoneBtn');
+
     // Update Settings Modal Labels
     lblSettingsTitle.textContent = i18n.t('modalHeader');
     lblLangSectionTitle.textContent = i18n.t('langSectionTitle');
     lblSkinSectionTitle.textContent = i18n.t('skinSectionTitle');
+    lblThemeSectionTitle.textContent = i18n.t('themeSectionTitle');
+    lblHatSectionTitle.textContent = i18n.t('hatSectionTitle');
     lblSoundSectionTitle.textContent = i18n.t('soundSectionTitle');
+    lblAmbientSectionTitle.textContent = i18n.t('ambientSectionTitle');
     lblVolumeSectionTitle.textContent = i18n.t('volumeSectionTitle');
+
     btnPreviewSound.textContent = i18n.t('btnPreview');
     btnDoneSettings.textContent = i18n.t('btnDone');
 
-    // Update Sound Dropdown Options
+    // Update Room Theme Buttons
+    btnThemeCozy.textContent = i18n.t('themeCozy');
+    btnThemeNight.textContent = i18n.t('themeNight');
+    btnThemeSakura.textContent = i18n.t('themeSakura');
+    btnThemeOasis.textContent = i18n.t('themeOasis');
+
+    // Update Sound Alert Dropdown Options
     selectSound.options[0].text = i18n.t('soundChime');
     selectSound.options[1].text = i18n.t('soundRetro');
     selectSound.options[2].text = i18n.t('soundMarimba');
     selectSound.options[3].text = i18n.t('soundDigital');
     selectSound.options[4].text = i18n.t('soundHarp');
+
+    // Update Ambient Soundscape Options
+    selectAmbient.options[0].text = i18n.t('ambNone');
+    selectAmbient.options[1].text = i18n.t('ambRain');
+    selectAmbient.options[2].text = i18n.t('ambCampfire');
+    selectAmbient.options[3].text = i18n.t('ambWind');
+    selectAmbient.options[4].text = i18n.t('ambCafe');
 
     // Update Companion Names in Quick Bar & Modal
     btnNameTiger.textContent = i18n.t('tigerName');
@@ -236,11 +380,15 @@ document.addEventListener('DOMContentLoaded', () => {
     cardTitleAvocado.textContent = i18n.t('avocadoName');
     cardDescAvocado.textContent = i18n.t('avocadoDesc');
 
+    // Refresh Gamification & Hats UI with updated language strings
+    updateGamificationUI(game.getLevelData());
+    updateHatsUI();
+
     // Re-apply skin text in selected language
     applySkin(tiger.getSkin(), false);
   }
 
-  // Language Button Clicks
+  // Language Button Click Handler
   langButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       sound.playClick();
@@ -249,19 +397,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- COMPANION SKIN LOGIC ---
-  function applySkin(skinKey, playSound = true) {
+  // --------------------------------------------------------------------------
+  // COMPANION SKIN LOGIC
+  // --------------------------------------------------------------------------
+  function applySkin(skinKey, playSoundEffect = true) {
     if (!characterMeta[skinKey]) skinKey = 'tiger';
 
     tiger.setSkin(skinKey);
     const meta = characterMeta[skinKey];
-    const name = i18n.t(meta.nameKey);
 
     // Update Title bar
     titleIcon.textContent = meta.icon;
     titleText.textContent = meta.title;
 
-    // Update speech
+    // Update Speech Bubble
     speechIcon.textContent = meta.icon;
     speechText.textContent = i18n.t(meta.focusKey);
 
@@ -275,12 +424,11 @@ document.addEventListener('DOMContentLoaded', () => {
       card.classList.toggle('active', card.getAttribute('data-skin') === skinKey);
     });
 
-    if (playSound) {
+    if (playSoundEffect) {
       sound.playClick();
     }
   }
 
-  // Quick Bar clicks
   quickSkinButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const skinKey = btn.getAttribute('data-skin');
@@ -288,7 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Modal Card clicks
   modalSkinCards.forEach(card => {
     card.addEventListener('click', () => {
       const skinKey = card.getAttribute('data-skin');
@@ -296,10 +443,200 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- SETTINGS MODAL LOGIC ---
+  // --------------------------------------------------------------------------
+  // GAMIFICATION: XP, LEVELS, STREAKS & ACCESSORIES
+  // --------------------------------------------------------------------------
+  function updateGamificationUI(levelData) {
+    const title = i18n.t(levelData.titleKey);
+    levelBadge.textContent = `LVL ${levelData.level}: ${title.toUpperCase()}`;
+    xpBarFill.style.width = `${levelData.percent}%`;
+    xpText.textContent = levelData.isMaxLevel 
+      ? `${levelData.currentXP} XP (MAX)` 
+      : `${levelData.progressXP} / ${levelData.neededXP} XP`;
+
+    streakCount.textContent = game.streak;
+  }
+
+  function handleLevelUp(levelData) {
+    sound.init();
+    sound.playAlert('harp');
+    tiger.setState('timesUp', true);
+    tiger.spawnConfetti(45);
+
+    const title = i18n.t('levelUpTitle');
+    const titleName = i18n.t(levelData.titleKey);
+    const body = i18n.t('levelUpBody', { level: levelData.level, title: titleName });
+
+    updateSpeechBubble(`${title} ${body}`);
+
+    if (window.electronAPI && window.electronAPI.sendNotification) {
+      window.electronAPI.sendNotification(title, body);
+    }
+  }
+
+  function handleHatUnlock(hatId) {
+    sound.init();
+    sound.playAlert('harp');
+    tiger.spawnConfetti(25);
+    updateHatsUI();
+    updateSpeechBubble(`✨ Ny hatt låst opp: ${hatId}!`);
+  }
+
+  function updateHatsUI() {
+    hatCards.forEach(card => {
+      const hatId = card.getAttribute('data-hat');
+      const isUnlocked = game.isHatUnlocked(hatId);
+      const isEquipped = game.equippedHat === hatId;
+
+      card.classList.toggle('locked', !isUnlocked);
+      card.classList.toggle('active', isEquipped);
+
+      const lockTag = card.querySelector('.hat-lock-tag');
+      if (lockTag) {
+        lockTag.style.display = isUnlocked ? 'none' : 'block';
+      }
+    });
+  }
+
+  // Hat Card Click Handlers
+  hatCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const hatId = card.getAttribute('data-hat');
+      if (game.isHatUnlocked(hatId)) {
+        sound.playClick();
+        game.equipHat(hatId);
+        tiger.setHat(hatId);
+        updateHatsUI();
+      } else {
+        sound.playClick();
+        let lvlReq = '2';
+        if (hatId === 'wizard') lvlReq = '3';
+        if (hatId === 'sunglasses') lvlReq = '4';
+        if (hatId === 'flowers') lvlReq = '5';
+        if (hatId === 'bow') {
+          updateSpeechBubble(i18n.t('hatBow'));
+        } else {
+          updateSpeechBubble(i18n.t('hatLocked', { lvl: lvlReq }));
+        }
+      }
+    });
+  });
+
+  // --------------------------------------------------------------------------
+  // ROOM THEMES (Cozy Day, Starry Night, Sakura, Botanical Oasis)
+  // --------------------------------------------------------------------------
+  function applyTheme(themeKey, playSoundEffect = true) {
+    game.setTheme(themeKey);
+    document.body.className = themeKey === 'cozy' ? '' : `theme-${themeKey}`;
+
+    themeButtons.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-theme') === themeKey);
+    });
+
+    if (playSoundEffect) {
+      sound.playClick();
+    }
+  }
+
+  themeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const themeKey = btn.getAttribute('data-theme');
+      applyTheme(themeKey, true);
+    });
+  });
+
+  // --------------------------------------------------------------------------
+  // MINI FOCUS TASK BANNER
+  // --------------------------------------------------------------------------
+  taskInput.addEventListener('input', () => {
+    const val = taskInput.value.trim();
+    game.setTask(taskInput.value);
+    btnTaskDone.classList.toggle('visible', val.length > 0);
+  });
+
+  taskInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      taskInput.blur();
+    }
+  });
+
+  btnTaskDone.addEventListener('click', () => {
+    const completed = game.completeTask();
+    if (completed) {
+      sound.init();
+      sound.playAlert('chime');
+      tiger.petTiger();
+      tiger.spawnConfetti(25);
+      taskInput.value = '';
+      btnTaskDone.classList.remove('visible');
+      updateSpeechBubble(i18n.t('taskDoneSpeech'));
+    }
+  });
+
+  // --------------------------------------------------------------------------
+  // HYDRATION INTERACTION (Click bubble to drink water)
+  // --------------------------------------------------------------------------
+  speechBubble.addEventListener('click', () => {
+    if (speechBubble.dataset.waterReminder === 'true') {
+      delete speechBubble.dataset.waterReminder;
+      game.drinkWater();
+      sound.playAlert('harp');
+      tiger.petTiger();
+      updateSpeechBubble(i18n.t('waterReward'));
+    }
+  });
+
+  // --------------------------------------------------------------------------
+  // PROCEDURAL AMBIENT SOUNDSCAPES
+  // --------------------------------------------------------------------------
+  selectAmbient.addEventListener('change', () => {
+    sound.init();
+    sound.setAmbientSound(selectAmbient.value);
+  });
+
+  sliderAmbientVolume.addEventListener('input', (e) => {
+    const val = parseInt(e.target.value, 10);
+    lblAmbientVolumePercent.textContent = `${val}%`;
+    sound.setAmbientVolume(val / 100);
+  });
+
+  // --------------------------------------------------------------------------
+  // ULTRA-COMPACT MINI WIDGET MODE (240px x 72px)
+  // --------------------------------------------------------------------------
+  function toggleMiniMode(forceState) {
+    isMiniMode = (typeof forceState === 'boolean') ? forceState : !isMiniMode;
+    const frame = document.querySelector('.window-frame');
+    frame.classList.toggle('mini-mode', isMiniMode);
+    btnMiniMode.title = isMiniMode ? i18n.t('fullModeTitle') : i18n.t('miniModeTitle');
+
+    if (window.electronAPI && window.electronAPI.setMiniMode) {
+      window.electronAPI.setMiniMode(isMiniMode);
+    }
+  }
+
+  btnMiniMode.addEventListener('click', () => {
+    sound.playClick();
+    toggleMiniMode(true);
+  });
+
+  btnMiniExpand.addEventListener('click', () => {
+    sound.playClick();
+    toggleMiniMode(false);
+  });
+
+  btnMiniToggle.addEventListener('click', () => {
+    sound.init();
+    sound.playClick();
+    timer.toggle();
+  });
+
+  // --------------------------------------------------------------------------
+  // SETTINGS MODAL
+  // --------------------------------------------------------------------------
   settingsBtn.addEventListener('click', () => {
     sound.init();
     sound.playClick();
+    updateHatsUI();
     settingsModal.classList.add('open');
   });
 
@@ -327,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tiger.petTiger();
   });
 
-  // Volume Slider
+  // Main Volume Slider
   sliderVolume.addEventListener('input', (e) => {
     const val = parseInt(e.target.value, 10);
     lblVolumePercent.textContent = `${val}%`;
@@ -339,7 +676,9 @@ document.addEventListener('DOMContentLoaded', () => {
     sound.playClick();
   });
 
-  // --- WINDOW CONTROLS (Electron IPC) ---
+  // --------------------------------------------------------------------------
+  // WINDOW CONTROLS (Electron IPC)
+  // --------------------------------------------------------------------------
   if (window.electronAPI) {
     minBtn.addEventListener('click', () => {
       sound.playClick();
@@ -367,7 +706,7 @@ document.addEventListener('DOMContentLoaded', () => {
     closeBtn.style.display = 'none';
   }
 
-  // --- SOUND TOGGLE & QUICK PREVIEW ---
+  // Sound toggle button
   soundBtn.addEventListener('click', () => {
     sound.init();
     const isMuted = sound.toggleMute();
@@ -381,7 +720,9 @@ document.addEventListener('DOMContentLoaded', () => {
     tiger.petTiger();
   });
 
-  // --- PRIMARY CONTROLS ---
+  // --------------------------------------------------------------------------
+  // PRIMARY TIMER CONTROLS
+  // --------------------------------------------------------------------------
   btnToggle.addEventListener('click', () => {
     sound.init();
     sound.playClick();
@@ -400,7 +741,9 @@ document.addEventListener('DOMContentLoaded', () => {
     timer.skip();
   });
 
-  // --- PRESETS ---
+  // --------------------------------------------------------------------------
+  // PRESET DURATION BUTTONS
+  // --------------------------------------------------------------------------
   presetButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       sound.playClick();
@@ -425,7 +768,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- MANUAL CUSTOM TIME (HH:MM:SS) ---
+  // --------------------------------------------------------------------------
+  // MANUAL CUSTOM TIME (HH:MM:SS)
+  // --------------------------------------------------------------------------
   btnSetCustom.addEventListener('click', () => {
     sound.playClick();
     applyCustomTime();
@@ -474,7 +819,9 @@ document.addEventListener('DOMContentLoaded', () => {
     inputSeconds.value = String(s).padStart(2, '0');
   }
 
-  // --- UI STATE UPDATES ---
+  // --------------------------------------------------------------------------
+  // UI & TIMER STATE UPDATES
+  // --------------------------------------------------------------------------
   function updateTimerDisplay(timeData) {
     timerDigits.textContent = timeData.formatted;
     const percent = Math.max(0, Math.min(100, (timeData.remainingSeconds / timeData.totalDuration) * 100));
@@ -501,15 +848,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const meta = characterMeta[tiger.getSkin()] || characterMeta.tiger;
     const companionName = i18n.t(meta.nameKey);
 
-    // Toggle button text & icon
+    // Toggle button text & icon (both full UI and mini-mode UI)
     if (isRunning) {
       btnToggleIcon.textContent = '⏸';
       btnToggleText.textContent = i18n.t('btnPause');
       btnToggle.classList.remove('paused-state');
+      btnMiniToggle.textContent = '⏸';
     } else {
       btnToggleIcon.textContent = '▶';
       btnToggleText.textContent = i18n.t('btnStart');
       btnToggle.classList.add('paused-state');
+      btnMiniToggle.textContent = '▶';
     }
 
     // Companion animation state
@@ -569,7 +918,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let title = `${meta.icon} ${companionName} Pomodoro`;
     let body = "Tiden er ute!";
 
-    if (result.finishedMode === 'focus' || result.finishedMode === 'deep' || result.finishedMode === 'custom') {
+    const isFocus = (result.finishedMode === 'focus' || result.finishedMode === 'deep' || result.finishedMode === 'custom');
+
+    if (isFocus) {
+      // Award +25 XP for completing a focus session!
+      game.addXP(25);
+
       if (result.isLongBreakReady) {
         title = i18n.t('notifLongBreakTitle', { name: companionName });
         body = i18n.t('notifLongBreakBody', { name: companionName });
@@ -579,7 +933,18 @@ document.addEventListener('DOMContentLoaded', () => {
         body = i18n.t('notifFocusDoneBody', { name: companionName });
         updateSpeechBubble(`🎉 ${title}`);
       }
+
+      // Check hydration reminder every 2 focus sessions
+      const shouldRemindWater = game.incrementWaterSession();
+      if (shouldRemindWater) {
+        speechBubble.dataset.waterReminder = 'true';
+        setTimeout(() => {
+          updateSpeechBubble(i18n.t('waterReminder'));
+        }, 4600);
+      }
     } else {
+      // Award +10 XP for resting properly during break!
+      game.addXP(10);
       title = i18n.t('notifBreakDoneTitle');
       body = i18n.t('notifBreakDoneBody', { name: companionName });
       updateSpeechBubble(`✨ ${title}`);
@@ -598,7 +963,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setTimeout(() => {
-      if (result.finishedMode === 'focus' || result.finishedMode === 'deep' || result.finishedMode === 'custom') {
+      if (isFocus) {
         if (result.isLongBreakReady) {
           const longBtn = document.querySelector('[data-preset="longBreak"]');
           setActivePresetButton(longBtn);
@@ -617,8 +982,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 4500);
   }
 
-  // Initial Sync & Language Activation
+  // --------------------------------------------------------------------------
+  // INITIAL SYNCHRONIZATION & BOOTSTRAP
+  // --------------------------------------------------------------------------
   applyLanguage(i18n.getLang());
   syncInputFieldsWithSeconds(timer.totalDuration);
   updateTimerDisplay(timer.getTimeData());
+  updateGamificationUI(game.getLevelData());
+  updateHatsUI();
 });

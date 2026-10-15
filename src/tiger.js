@@ -31,6 +31,13 @@ class PixelTiger {
     this.state = 'focus';
     this.isRunning = false;
 
+    // Equipped Accessory (Hat): 'none', 'crown', 'wizard', 'sunglasses', 'flowers', 'bow'
+    this.equippedHat = 'none';
+    try {
+      const savedHat = localStorage.getItem('tiger_equipped_hat');
+      if (savedHat) this.equippedHat = savedHat;
+    } catch (e) {}
+
     // Animation Timers & Counters
     this.frame = 0;
     this.blinkTimer = 0;
@@ -154,9 +161,20 @@ class PixelTiger {
     return this.skin;
   }
 
+  setHat(newHat) {
+    this.equippedHat = newHat;
+    try {
+      localStorage.setItem('tiger_equipped_hat', newHat);
+    } catch (e) {}
+    this.petTiger();
+  }
+
   petTiger() {
     this.interactivePetTimer = 45;
     this.spawnConfetti(8);
+    if (typeof this.onPet === 'function') {
+      this.onPet();
+    }
   }
 
   setState(newState, isRunning = true) {
@@ -346,6 +364,11 @@ class PixelTiger {
     // Celebratory raised paws / hands
     if (isTimesUp) {
       this.drawCelebrationPaws(headY);
+    }
+
+    // Draw Equipped Hat / Accessory
+    if (this.equippedHat && this.equippedHat !== 'none') {
+      this.drawEquippedHat(headY);
     }
 
     // Particle effects
@@ -815,6 +838,76 @@ class PixelTiger {
       }
 
       this.ctx.restore();
+    }
+  }
+
+  setHat(hatId) {
+    this.equippedHat = hatId || 'none';
+    this.petTiger();
+  }
+
+  getHat() {
+    return this.equippedHat;
+  }
+
+  drawEquippedHat(headY) {
+    switch (this.equippedHat) {
+      case 'crown':
+        // Golden Crown 👑
+        this.drawRect(10, headY - 2, 12, 2, '#F1C40F');
+        this.drawRect(10, headY - 5, 2, 3, '#F1C40F');
+        this.drawRect(15, headY - 6, 2, 4, '#F1C40F');
+        this.drawRect(20, headY - 5, 2, 3, '#F1C40F');
+        // Gems
+        this.drawPixel(11, headY - 1, '#2ECC71'); // emerald
+        this.drawPixel(15, headY - 1, '#E74C3C'); // ruby
+        this.drawPixel(16, headY - 1, '#E74C3C');
+        this.drawPixel(20, headY - 1, '#3498DB'); // sapphire
+        break;
+
+      case 'wizard':
+        // Starry Wizard Hat 🧙‍♂️
+        this.drawRect(7, headY - 1, 18, 2, '#2C3E50'); // Brim
+        this.drawRect(10, headY - 3, 12, 2, '#34495E');
+        this.drawRect(12, headY - 5, 8, 2, '#34495E');
+        this.drawRect(13, headY - 7, 5, 2, '#2C3E50');
+        this.drawRect(15, headY - 9, 3, 2, '#34495E');
+        this.drawPixel(18, headY - 10, '#F1C40F'); // Glowing star tip!
+        this.drawPixel(17, headY - 9, '#F1C40F');
+        // Ribbon band
+        this.drawRect(10, headY - 2, 12, 1, '#E67E22');
+        break;
+
+      case 'sunglasses':
+        // Retro Pixel Sunglasses 🕶️
+        this.drawRect(8, headY + 5, 6, 4, '#1E272E');
+        this.drawRect(18, headY + 5, 6, 4, '#1E272E');
+        this.drawRect(14, headY + 5, 4, 1, '#1E272E'); // Bridge
+        // Reflection shine
+        this.drawPixel(9, headY + 6, '#FFFFFF');
+        this.drawPixel(10, headY + 7, '#FFFFFF');
+        this.drawPixel(19, headY + 6, '#FFFFFF');
+        this.drawPixel(20, headY + 7, '#FFFFFF');
+        break;
+
+      case 'flowers':
+        // Flower Crown 🌸
+        // Green vine
+        this.drawRect(8, headY - 1, 16, 1, '#2ECC71');
+        // Flowers
+        this.drawRect(9, headY - 2, 2, 2, '#FF80AB'); // Pink
+        this.drawRect(13, headY - 3, 2, 2, '#FFE57F'); // Yellow
+        this.drawRect(17, headY - 3, 2, 2, '#FFFFFF'); // White
+        this.drawRect(21, headY - 2, 2, 2, '#A29BFE'); // Lilac
+        break;
+
+      case 'bow':
+        // Red Ribbon Bow 🎀 (Tucked beside left ear)
+        this.drawRect(6, headY - 1, 4, 3, '#FF3838');
+        this.drawPixel(5, headY - 2, '#FF3838');
+        this.drawPixel(5, headY, '#FF3838');
+        this.drawPixel(7, headY, '#FFEAA7'); // Gold knot
+        break;
     }
   }
 }

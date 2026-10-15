@@ -44,6 +44,52 @@ Procedural Web Audio API sound generator (no external audio files needed):
 - Switch languages seamlessly with 1-click in the Settings menu (`⚙️`).
 - All tooltips, presets, buttons, speech bubbles, and notifications update in real-time.
 
+### 🎮 Tamagotchi Gamification & Levels
+- **XP Progression**: Earn +25 XP per focus session, +10 XP per break, +20 XP for focus tasks, and +5 XP for hydration!
+- **5 Levels**:
+  - 🌱 **Level 1**: Spire / Sprout
+  - 🎓 **Level 2**: Fokuslærling / Focus Apprentice
+  - ⚔️ **Level 3**: Fokusridder / Focus Knight
+  - 🧘 **Level 4**: Zen Mester / Zen Master
+  - 🌟 **Level 5**: Legendarisk Guru / Legendary Guru
+- **🔥 Daily Streaks**: Automatically tracks consecutive daily focus streaks.
+- **🐾 Pet Counter**: Keeps track of pets, unlocking a special secret accessory at 10 pets!
+
+### 🎩 Unlockable Hats & Accessories
+Procedural pixel-art accessories that dynamically bob on all 5 companions:
+- ❌ **Ingen / None**: Default look.
+- 👑 **Kongekrone / Golden Crown**: Unlocks at Level 2.
+- 🧙‍♂️ **Trollmannshatt / Starry Wizard Hat**: Unlocks at Level 3.
+- 🕶️ **Solbriller / Pixel Sunglasses**: Unlocks at Level 4.
+- 🌸 **Blomsterkrans / Flower Crown**: Unlocks at Level 5.
+- 🎀 **Rød Sløyfe / Red Bow**: Secret accessory unlocked by petting your buddy 10 times!
+
+### 🌧️ Procedural Ambient Soundscapes
+Relaxing background audio synthesized live in Web Audio API with independent volume controls:
+- 🌧️ **Mildt Regn / Gentle Rain**: Soft pink noise through dual acoustic filters.
+- 🔥 **Knitrende Peis / Campfire**: Warm low-frequency drone with randomized crackle bursts.
+- 🍃 **Skogsbris / Forest Breeze**: Swaying resonant wind with slow LFO modulation.
+- ☕ **Koselig Kafé / Cozy Cafe**: Soft acoustic chatter drone and ambient frequencies.
+
+### 🎯 Mini Focus Task Banner
+- Editable banner right above your companion: *"Hva fokuserer du på akkurat nå?"*
+- One-click checkmark (`✓ Ferdig`) to complete your task, celebrate with confetti, and claim **+20 XP**!
+
+### 🏡 4 Cozy Room Themes
+- ☀️ **Koselig Dag / Cozy Day**: Classic warm beige and pastel cream.
+- 🌙 **Stjerneklar Natt / Starry Night**: True OLED-friendly dark mode with midnight blues.
+- 🌸 **Kirsebærlund / Sakura Blossom**: Pastel pink floral aesthetic.
+- 🪴 **Botanisk Drivhus / Botanical Oasis**: Calming matcha and greenhouse foliage greens.
+
+### 🗗 Ultra-Compact Floating Mini-Widget Mode (240x72 px)
+- Toggle anytime via the **`🗗`** button on the title bar.
+- Shrinks the app into a sleek 240x72 px desk ticker showing your companion's bobbing head, digital countdown, and mini play/pause control.
+- Automatically stays on top and is 100% draggable from anywhere on the widget!
+- Click **`🗖`** to restore to full desk buddy view anytime.
+
+### 💧 Gentle Hydration Reminders
+- Gentle reminder speech bubble every 2 focus sessions. Click the companion to take a sip and earn +5 XP!
+
 ### ⏱️ Flexible Countdown & Presets
 - **Manual Input (HH : MM : SS)**: Set any custom hours, minutes, and seconds.
 - **Quick Presets**: 25m Focus, 5m Short Break, 15m Long Break, 50m Deep Work.

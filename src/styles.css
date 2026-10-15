@@ -815,13 +815,416 @@ body {
   color: var(--tiger-orange);
 }
 
-/* Remove number input spinners */
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+/* ==========================================================================
+   ROOM THEMES (Dark Mode / Starry Night, Sakura Blossom, Botanical Greenhouse)
+   ========================================================================== */
+
+body.theme-night {
+  --bg-window: #16161E;
+  --bg-card: #1F2335;
+  --bg-card-hover: #292E42;
+  --bg-card-border: #3B4261;
+  --border-charcoal: #0F0F14;
+  --border-subtle: #3B4261;
+  --text-dark: #C0CAF5;
+  --text-muted: #7AA2F7;
+  --cream-muzzle: #24283B;
+  --tiger-orange: #FF9E64;
+  --tiger-orange-hover: #FF7A38;
 }
-input[type=number] {
-  -moz-appearance: textfield;
+
+body.theme-sakura {
+  --bg-window: #FFF5F7;
+  --bg-card: #FFEAEF;
+  --bg-card-hover: #FFDDE5;
+  --bg-card-border: #FFB3C1;
+  --border-charcoal: #4A2E35;
+  --border-subtle: #FFCCD6;
+  --text-dark: #4A2E35;
+  --text-muted: #A3586B;
+  --tiger-orange: #FF758F;
+  --tiger-orange-hover: #FF5C7A;
 }
+
+body.theme-oasis {
+  --bg-window: #F4FAF5;
+  --bg-card: #E8F5E9;
+  --bg-card-hover: #DCEDC8;
+  --bg-card-border: #A5D6A7;
+  --border-charcoal: #203A2B;
+  --border-subtle: #C8E6C9;
+  --text-dark: #203A2B;
+  --text-muted: #4B7A5C;
+  --tiger-orange: #2ECC71;
+  --tiger-orange-hover: #27AE60;
+}
+
+body.theme-night .settings-modal {
+  background: rgba(22, 22, 30, 0.98);
+}
+
+body.theme-sakura .settings-modal {
+  background: rgba(255, 245, 247, 0.98);
+}
+
+body.theme-oasis .settings-modal {
+  background: rgba(244, 250, 245, 0.98);
+}
+
+body.theme-night .modal-skin-card,
+body.theme-night .lang-btn,
+body.theme-night .hat-card,
+body.theme-night .theme-btn,
+body.theme-night .sound-dropdown,
+body.theme-night .volume-control-box,
+body.theme-night .level-badge,
+body.theme-night .xp-bar-container,
+body.theme-night .mini-icon-btn,
+body.theme-night .time-input-box {
+  background: var(--bg-card);
+  color: var(--text-dark);
+}
+
+body.theme-night .task-banner {
+  background: #1F2335;
+  border-color: #3B4261;
+}
+
+body.theme-night .task-input {
+  color: var(--text-dark);
+}
+
+/* ==========================================================================
+   GAMIFICATION: LEVEL, XP PROGRESS BAR & STREAK
+   ========================================================================== */
+.gamification-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.level-badge {
+  background: white;
+  border: 1.5px solid var(--border-charcoal);
+  border-radius: 8px;
+  padding: 2px 6px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: var(--text-dark);
+  box-shadow: var(--pixel-shadow-sm);
+  white-space: nowrap;
+}
+
+.xp-bar-container {
+  flex: 1;
+  height: 12px;
+  background: white;
+  border: 1.5px solid var(--border-charcoal);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.xp-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #F1C40F, #FFA35C);
+  transition: width 0.4s ease;
+}
+
+.xp-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 12px;
+  pointer-events: none;
+}
+
+.streak-badge {
+  background: #FFF3E0;
+  border: 1.5px solid #FF9800;
+  border-radius: 8px;
+  padding: 2px 6px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #E65100;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   MINI FOCUS TASK BANNER
+   ========================================================================== */
+.task-banner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #FFFBEA;
+  border: 1.5px dashed var(--border-charcoal);
+  border-radius: 10px;
+  padding: 4px 8px;
+  gap: 6px;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 3px rgba(61, 51, 49, 0.05);
+}
+
+.task-icon {
+  font-size: 13px;
+}
+
+.task-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.task-input::placeholder {
+  color: #A0938D;
+  font-style: italic;
+}
+
+.task-done-btn {
+  background: var(--matcha-green);
+  border: 1.5px solid var(--border-charcoal);
+  border-radius: 6px;
+  padding: 2px 6px;
+  color: white;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+  display: none;
+}
+
+.task-done-btn.visible {
+  display: block;
+}
+
+.task-done-btn:hover {
+  background: #25B760;
+}
+
+/* ==========================================================================
+   HATS & ACCESSORIES GRID (SETTINGS MODAL)
+   ========================================================================== */
+.hats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.hat-card {
+  background: white;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 6px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.hat-card:hover:not(.locked) {
+  border-color: var(--tiger-orange);
+  background: var(--bg-card-hover);
+}
+
+.hat-card.active {
+  background: var(--tiger-orange-soft);
+  border-color: var(--border-charcoal);
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+.hat-card.locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+}
+
+.hat-icon {
+  font-size: 18px;
+}
+
+.hat-title {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.hat-lock-tag {
+  font-size: 7px;
+  font-weight: 700;
+  color: #D63031;
+}
+
+/* ==========================================================================
+   THEMES SELECTOR ROW (SETTINGS MODAL)
+   ========================================================================== */
+.theme-buttons-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.theme-btn {
+  background: white;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.theme-btn:hover {
+  border-color: var(--tiger-orange);
+  background: var(--bg-card-hover);
+}
+
+.theme-btn.active {
+  background: var(--tiger-orange);
+  color: white;
+  border-color: var(--border-charcoal);
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+/* ==========================================================================
+   ULTRA-COMPACT MINI-WIDGET MODE (240px x 72px)
+   ========================================================================== */
+.window-frame.mini-mode {
+  width: 240px;
+  height: 72px;
+  border-radius: 16px;
+  padding: 0;
+  box-shadow: 0 8px 24px rgba(61, 51, 49, 0.28);
+}
+
+.window-frame.mini-mode .title-bar {
+  display: none;
+}
+
+.window-frame.mini-mode .settings-modal {
+  display: none !important;
+}
+
+.window-frame.mini-mode .skin-bar,
+.window-frame.mini-mode .speech-bubble,
+.window-frame.mini-mode .session-tracker,
+.window-frame.mini-mode .gamification-bar,
+.window-frame.mini-mode .task-banner,
+.window-frame.mini-mode .presets-container,
+.window-frame.mini-mode .custom-time-container,
+.window-frame.mini-mode .controls-container,
+.window-frame.mini-mode .bottom-info-bar,
+.window-frame.mini-mode .progress-bar-bg {
+  display: none !important;
+}
+
+.window-frame.mini-mode .app-content {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  height: 100%;
+  -webkit-app-region: drag; /* entire mini-widget is draggable! */
+}
+
+.window-frame.mini-mode .tiger-stage {
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  border: 1.5px solid var(--border-charcoal);
+  border-radius: 12px;
+  background: var(--bg-card);
+  justify-content: center;
+  -webkit-app-region: no-drag;
+}
+
+.window-frame.mini-mode #tigerCanvas {
+  width: 48px;
+  height: 48px;
+}
+
+.window-frame.mini-mode .timer-card {
+  margin: 0;
+  width: auto;
+}
+
+.window-frame.mini-mode .timer-digits-container {
+  padding: 4px 8px;
+  border: 1.5px solid var(--border-charcoal);
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.window-frame.mini-mode .timer-digits {
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.mini-controls-cluster {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  -webkit-app-region: no-drag;
+}
+
+.window-frame.mini-mode .mini-controls-cluster {
+  display: flex;
+}
+
+.mini-icon-btn {
+  background: white;
+  border: 1.5px solid var(--border-charcoal);
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.1s ease;
+}
+
+.mini-icon-btn:hover {
+  background: var(--tiger-orange-soft);
+}
+
+.mini-icon-btn:active {
+  transform: translateY(1px);
+}
+
+.mini-play-btn {
+  background: var(--tiger-orange);
+  color: white;
+}
+
 

@@ -1,5 +1,7 @@
 /**
- * Internationalization (i18n) Engine
+ * ============================================================================
+ * INTERNATIONALIZATION (i18n) ENGINE
+ * ============================================================================
  * Multi-language support for Tiger & Friends Pomodoro.
  * Supports: Norwegian (Norsk Bokmål 'no') and English ('en').
  */
@@ -11,11 +13,13 @@ const translations = {
     pinOn: 'Alltid øverst: PÅ',
     pinOff: 'Alltid øverst: AV',
     soundToggle: 'Lyd Av/På',
-    settingsTitle: 'Innstillinger (Språk, Skins & Lyd)',
+    settingsTitle: 'Innstillinger (Språk, Skins, Hatter & Lyd)',
     minimizeTitle: 'Minimer',
     closeTitle: 'Lukk',
+    miniModeTitle: 'Flytende Mini-Modus',
+    fullModeTitle: 'Full Skrivebordsmodus',
 
-    // Companion Names
+    // Companion Names & Descriptions
     tigerName: 'Tiger',
     tigerDesc: 'Koselig tiger',
     hippoName: 'Flodhest',
@@ -43,6 +47,9 @@ const translations = {
     timerReset: '↺ Timer tilbakestilt. Klar når du er!',
     atLeastOneSec: '⚠️ Vennligst sett minst 1 sekund!',
     customTimerSet: '⏱️ Egendefinert: {duration}',
+    waterReminder: '💧 Husk å drikke et glass vann!',
+    waterReward: '💧 Frisk og hydrert! +5 XP',
+    taskDoneSpeech: '🎯 Fantastisk! Oppgave fullført! +20 XP',
 
     // Presets
     presetFocus: '25m<br>Fokus',
@@ -68,11 +75,43 @@ const translations = {
     petHint: '🐾 Klikk på vennen for kos',
     testSoundLink: 'Test lyd ♫',
 
+    // Mini Focus Task
+    taskPlaceholder: 'Hva fokuserer du på akkurat nå?',
+    taskDoneBtn: '✓ Ferdig',
+
+    // Gamification & Levels
+    lvl1Title: 'Spire',
+    lvl2Title: 'Fokuslærling',
+    lvl3Title: 'Fokusridder',
+    lvl4Title: 'Zen Mester',
+    lvl5Title: 'Legendarisk Guru',
+    levelUpTitle: '🎉 NIVÅ OPP!',
+    levelUpBody: 'Gratulerer! Du nådde {level}: {title}!',
+    streakLabel: 'dager streak',
+
+    // Hats & Accessories
+    hatSectionTitle: '🎩 Låsbare Hatter & Tilbehør:',
+    hatNone: '❌ Ingen',
+    hatCrown: '👑 Kongekrone (Lvl 2)',
+    hatWizard: '🧙‍♂️ Trollmannshatt (Lvl 3)',
+    hatSunglasses: '🕶️ Solbriller (Lvl 4)',
+    hatFlowers: '🌸 Blomsterkrans (Lvl 5)',
+    hatBow: '🎀 Rød Sløyfe (10 kos)',
+    hatLocked: '🔒 Låst (Nivå {lvl})',
+
+    // Room Themes
+    themeSectionTitle: '🏡 Rom-Tema:',
+    themeCozy: '☀️ Koselig Dag',
+    themeNight: '🌙 Stjerneklar Natt',
+    themeSakura: '🌸 Kirsebærlund',
+    themeOasis: '🪴 Botanisk Drivhus',
+
     // Settings Modal
     modalHeader: '⚙️ INNSTILLINGER',
     langSectionTitle: '🌐 Språk / Language:',
     skinSectionTitle: '🎨 Velg Skrivebordsvenn (Skins):',
     soundSectionTitle: '🔔 Velg Timer-Lyd:',
+    ambientSectionTitle: '🌧️ Bakgrunnslyd (Ambient Soundscape):',
     volumeSectionTitle: '🔊 Lydstyrke:',
     btnPreview: '▶ Test',
     btnDone: '✓ Ferdig & Lagre',
@@ -83,6 +122,13 @@ const translations = {
     soundMarimba: '🪵 Varm Marimba / Kalimba',
     soundDigital: '⏰ Digital Klokke (Beep)',
     soundHarp: '✨ Magisk Harpe',
+
+    // Ambient Names
+    ambNone: '⏹️ Ingen (Av)',
+    ambRain: '🌧️ Mildt Regn',
+    ambCampfire: '🔥 Knitrende Peis',
+    ambWind: '🍃 Skogsbris',
+    ambCafe: '☕ Koselig Kafé',
 
     // Notifications
     notifFocusDoneTitle: '⏰ Fokusrunde fullført!',
@@ -99,11 +145,13 @@ const translations = {
     pinOn: 'Always on Top: ON',
     pinOff: 'Always on Top: OFF',
     soundToggle: 'Toggle Sound',
-    settingsTitle: 'Settings (Language, Skins & Sound)',
+    settingsTitle: 'Settings (Language, Skins, Hats & Sound)',
     minimizeTitle: 'Minimize',
     closeTitle: 'Close',
+    miniModeTitle: 'Floating Mini Widget',
+    fullModeTitle: 'Full Desktop Window',
 
-    // Companion Names
+    // Companion Names & Descriptions
     tigerName: 'Tiger',
     tigerDesc: 'Cozy striped buddy',
     hippoName: 'Hippo',
@@ -131,6 +179,9 @@ const translations = {
     timerReset: '↺ Timer reset. Ready when you are!',
     atLeastOneSec: '⚠️ Please set at least 1 second!',
     customTimerSet: '⏱️ Custom: {duration}',
+    waterReminder: '💧 Remember to drink some water!',
+    waterReward: '💧 Refreshed and hydrated! +5 XP',
+    taskDoneSpeech: '🎯 Fantastic! Focus task complete! +20 XP',
 
     // Presets
     presetFocus: '25m<br>Focus',
@@ -156,11 +207,43 @@ const translations = {
     petHint: '🐾 Click friend to pet',
     testSoundLink: 'Test sound ♫',
 
+    // Mini Focus Task
+    taskPlaceholder: 'What are you focusing on right now?',
+    taskDoneBtn: '✓ Done',
+
+    // Gamification & Levels
+    lvl1Title: 'Sprout',
+    lvl2Title: 'Apprentice',
+    lvl3Title: 'Focus Knight',
+    lvl4Title: 'Zen Master',
+    lvl5Title: 'Legendary Guru',
+    levelUpTitle: '🎉 LEVEL UP!',
+    levelUpBody: 'Congratulations! You reached Level {level}: {title}!',
+    streakLabel: 'days streak',
+
+    // Hats & Accessories
+    hatSectionTitle: '🎩 Unlockable Hats & Accessories:',
+    hatNone: '❌ None',
+    hatCrown: '👑 Golden Crown (Lvl 2)',
+    hatWizard: '🧙‍♂️ Wizard Hat (Lvl 3)',
+    hatSunglasses: '🕶️ Sunglasses (Lvl 4)',
+    hatFlowers: '🌸 Flower Crown (Lvl 5)',
+    hatBow: '🎀 Red Bow (10 pets)',
+    hatLocked: '🔒 Locked (Level {lvl})',
+
+    // Room Themes
+    themeSectionTitle: '🏡 Room Theme:',
+    themeCozy: '☀️ Cozy Day',
+    themeNight: '🌙 Starry Night',
+    themeSakura: '🌸 Sakura Blossom',
+    themeOasis: '🪴 Botanical Greenhouse',
+
     // Settings Modal
     modalHeader: '⚙️ SETTINGS',
     langSectionTitle: '🌐 Language / Språk:',
     skinSectionTitle: '🎨 Choose Companion (Skins):',
     soundSectionTitle: '🔔 Select Timer Sound:',
+    ambientSectionTitle: '🌧️ Ambient Soundscape:',
     volumeSectionTitle: '🔊 Volume:',
     btnPreview: '▶ Test',
     btnDone: '✓ Done & Save',
@@ -171,6 +254,13 @@ const translations = {
     soundMarimba: '🪵 Warm Marimba / Kalimba',
     soundDigital: '⏰ Digital Watch (Beep)',
     soundHarp: '✨ Magical Harp',
+
+    // Ambient Names
+    ambNone: '⏹️ None (Off)',
+    ambRain: '🌧️ Gentle Rain',
+    ambCampfire: '🔥 Cozy Campfire',
+    ambWind: '🍃 Forest Breeze',
+    ambCafe: '☕ Cozy Cafe',
 
     // Notifications
     notifFocusDoneTitle: '⏰ Focus session complete!',

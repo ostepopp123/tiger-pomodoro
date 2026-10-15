@@ -18,7 +18,8 @@
       <div class="title-controls">
         <button class="icon-btn" id="pinBtn" title="Alltid øverst (Pin)">📌</button>
         <button class="icon-btn" id="soundBtn" title="Lyd Av/På">🔔</button>
-        <button class="icon-btn" id="settingsBtn" title="Innstillinger (Språk, Skins & Lyd)">⚙️</button>
+        <button class="icon-btn" id="btnMiniMode" title="Mini-Modus">🗗</button>
+        <button class="icon-btn" id="settingsBtn" title="Innstillinger (Språk, Skins, Hatter & Lyd)">⚙️</button>
         <button class="icon-btn" id="minBtn" title="Minimer">➖</button>
         <button class="icon-btn close-btn" id="closeBtn" title="Lukk">✕</button>
       </div>
@@ -82,6 +83,53 @@
         </div>
       </div>
 
+      <!-- Room Theme Section -->
+      <div class="settings-section">
+        <div class="settings-section-title" id="lblThemeSectionTitle">🏡 Rom-Tema:</div>
+        <div class="theme-buttons-row">
+          <button class="theme-btn active" data-theme="cozy" id="btnThemeCozy">☀️ Koselig Dag</button>
+          <button class="theme-btn" data-theme="night" id="btnThemeNight">🌙 Stjerneklar Natt</button>
+          <button class="theme-btn" data-theme="sakura" id="btnThemeSakura">🌸 Kirsebærlund</button>
+          <button class="theme-btn" data-theme="oasis" id="btnThemeOasis">🪴 Botanisk Drivhus</button>
+        </div>
+      </div>
+
+      <!-- Hats & Accessories Section -->
+      <div class="settings-section">
+        <div class="settings-section-title" id="lblHatSectionTitle">🎩 Låsbare Hatter & Tilbehør:</div>
+        <div class="hats-grid" id="hatsGrid">
+          <div class="hat-card active" data-hat="none">
+            <span class="hat-icon">❌</span>
+            <span class="hat-title" id="hatNameNone">Ingen</span>
+          </div>
+          <div class="hat-card" data-hat="crown">
+            <span class="hat-icon">👑</span>
+            <span class="hat-title" id="hatNameCrown">Krone</span>
+            <span class="hat-lock-tag" id="lockCrown">Lvl 2</span>
+          </div>
+          <div class="hat-card" data-hat="wizard">
+            <span class="hat-icon">🧙‍♂️</span>
+            <span class="hat-title" id="hatNameWizard">Trollmann</span>
+            <span class="hat-lock-tag" id="lockWizard">Lvl 3</span>
+          </div>
+          <div class="hat-card" data-hat="sunglasses">
+            <span class="hat-icon">🕶️</span>
+            <span class="hat-title" id="hatNameSunglasses">Solbriller</span>
+            <span class="hat-lock-tag" id="lockSunglasses">Lvl 4</span>
+          </div>
+          <div class="hat-card" data-hat="flowers">
+            <span class="hat-icon">🌸</span>
+            <span class="hat-title" id="hatNameFlowers">Krans</span>
+            <span class="hat-lock-tag" id="lockFlowers">Lvl 5</span>
+          </div>
+          <div class="hat-card" data-hat="bow">
+            <span class="hat-icon">🎀</span>
+            <span class="hat-title" id="hatNameBow">Sløyfe</span>
+            <span class="hat-lock-tag" id="lockBow">10 kos</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Sound Selection Section -->
       <div class="settings-section">
         <div class="settings-section-title" id="lblSoundSectionTitle">🔔 Velg Timer-Lyd:</div>
@@ -94,6 +142,25 @@
             <option value="harp">✨ Magisk Harpe</option>
           </select>
           <button class="sound-preview-btn" id="btnPreviewSound">▶ Test</button>
+        </div>
+      </div>
+
+      <!-- Procedural Ambient Soundscapes Section -->
+      <div class="settings-section">
+        <div class="settings-section-title" id="lblAmbientSectionTitle">🌧️ Bakgrunnslyd:</div>
+        <div class="sound-selector-row">
+          <select class="sound-dropdown" id="selectAmbient">
+            <option value="none">⏹️ Ingen (Av)</option>
+            <option value="rain">🌧️ Mildt Regn</option>
+            <option value="campfire">🔥 Knitrende Peis</option>
+            <option value="wind">🍃 Skogsbris</option>
+            <option value="cafe">☕ Koselig Kafé</option>
+          </select>
+        </div>
+        <div class="volume-control-box" style="margin-top: 6px;">
+          <span>🎧</span>
+          <input type="range" class="volume-slider" id="sliderAmbientVolume" min="0" max="100" value="40">
+          <span class="volume-percent" id="lblAmbientVolumePercent">40%</span>
         </div>
       </div>
 
@@ -112,6 +179,12 @@
 
     <!-- App Body Content -->
     <main class="app-content">
+      <!-- Mini Widget Controls (visible only in mini-mode) -->
+      <div class="mini-controls-cluster" id="miniControlsCluster">
+        <button class="mini-icon-btn mini-play-btn" id="btnMiniToggle" title="Start / Pause">▶</button>
+        <button class="mini-icon-btn" id="btnMiniExpand" title="Gjenopprett full visning">🗖</button>
+      </div>
+
       <!-- Quick Skin Switcher Bar -->
       <div class="skin-bar">
         <button class="skin-btn active" data-skin="tiger" title="Tiger">🐯 <span class="skin-name" id="btnNameTiger">Tiger</span></button>
@@ -119,6 +192,13 @@
         <button class="skin-btn" data-skin="pig" title="Gris">🐷 <span class="skin-name" id="btnNamePig">Gris</span></button>
         <button class="skin-btn" data-skin="guineapig" title="Marsvin">🐹 <span class="skin-name" id="btnNameGuineaPig">Marsvin</span></button>
         <button class="skin-btn" data-skin="avocado" title="Avokado">🥑 <span class="skin-name" id="btnNameAvocado">Avokado</span></button>
+      </div>
+
+      <!-- Mini Focus Task Banner -->
+      <div class="task-banner" id="taskBanner">
+        <span class="task-icon">🎯</span>
+        <input type="text" class="task-input" id="taskInput" placeholder="Hva fokuserer du på akkurat nå?" maxlength="40">
+        <button class="task-done-btn" id="btnTaskDone">✓ Ferdig</button>
       </div>
 
       <!-- Companion Arena -->
@@ -140,6 +220,16 @@
           <span class="session-label" id="sessionLabel">0/4</span>
         </div>
       </section>
+
+      <!-- Gamification & Level Progression Bar -->
+      <div class="gamification-bar" id="gamificationBar">
+        <div class="level-badge" id="levelBadge">LVL 1: SPIRE</div>
+        <div class="xp-bar-container" title="XP Framgang">
+          <div class="xp-bar-fill" id="xpBarFill" style="width: 0%;"></div>
+          <span class="xp-text" id="xpText">0 / 50 XP</span>
+        </div>
+        <div class="streak-badge" id="streakBadge" title="Daglig fokus streak">🔥 <span id="streakCount">1</span>d</div>
+      </div>
 
       <!-- Digital Timer Display Box -->
       <section class="timer-card">
@@ -201,6 +291,7 @@
 
   <!-- Scripts -->
   <script src="i18n.js"></script>
+  <script src="gamification.js"></script>
   <script src="tiger.js"></script>
   <script src="audio.js"></script>
   <script src="timer.js"></script>

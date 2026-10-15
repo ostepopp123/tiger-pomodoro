@@ -17,6 +17,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   toggleAlwaysOnTop: () => ipcRenderer.invoke('window:toggle-always-on-top'),
   getAlwaysOnTop: () => ipcRenderer.invoke('window:get-always-on-top'),
 
+  // Mini-Widget Mode Resizing
+  setMiniMode: (isMini) => ipcRenderer.invoke('window:set-mini-mode', isMini),
+
   // Native OS desktop notifications
   sendNotification: (title, body) => ipcRenderer.send('notification:send', { title, body })
 });

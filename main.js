@@ -83,6 +83,21 @@ ipcMain.handle('window:get-always-on-top', () => {
 });
 
 /**
+ * Toggles or sets the Ultra-Compact Mini Widget Mode.
+ * Resizes the native desktop window to 240x72 or restores to 380x640.
+ */
+ipcMain.handle('window:set-mini-mode', (event, isMini) => {
+  if (!mainWindow) return false;
+  if (isMini) {
+    mainWindow.setSize(240, 72);
+    mainWindow.setAlwaysOnTop(true, 'screen-saver');
+  } else {
+    mainWindow.setSize(380, 640);
+  }
+  return isMini;
+});
+
+/**
  * Displays a native desktop toast notification.
  */
 ipcMain.on('notification:send', (event, { title, body }) => {

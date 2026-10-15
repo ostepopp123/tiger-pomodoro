@@ -57,6 +57,13 @@ class SoundEngine {
     try {
       localStorage.setItem('tiger_sound_muted', String(this.isMuted));
     } catch (e) {}
+
+    if (this.isMuted) {
+      this.stopAmbient();
+    } else if (this.ambientType && this.ambientType !== 'none') {
+      this.startAmbient(this.ambientType);
+    }
+
     return this.isMuted;
   }
 
@@ -282,6 +289,195 @@ class SoundEngine {
       osc.start(t);
       osc.stop(t + duration);
     });
+  }
+
+  // --------------------------------------------------------------------------
+  // PROCEDURAL AMBIENT SOUNDSCAPES (Rain, Campfire, Forest Wind, Cozy Cafe)
+  // --------------------------------------------------------------------------
+
+  getAmbientList() {
+    return [
+      { id: 'none', name: '⏹️ Ingen (Off)' },
+      { id: 'rain', name: '🌧️ Mildt Regn (Rain)' },
+      { id: 'campfire', name: '🔥 Knitrende Peis (Campfire)' },
+      { id: 'wind', name: '🍃 Skogsbris (Forest Breeze)' },
+      { id: 'cafe', name: '☕ Koselig Kafé (Cozy Cafe)' }
+    ];
+  }
+
+  createNoiseBuffer() {
+    if (!this.ctx) return null;
+    const bufferSize = this.ctx.sampleRate * 4; // 4 second loop
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+
+    let lastOut = 0.0;
+    for (let i = 0; i < bufferSize; i++) {
+      // Pink noise approximation for warmer, softer acoustic texture
+      const white = Math.random() * 2 - 1;
+      data[i] = (lastOut + (0.02 * white)) / 1.02;
+      lastOut = data[i];
+      data[i] *= 3.5;
+    }
+    return buffer;
+  }
+
+  setAmbientSound(type) {
+    this.ambientType = type;
+    try {
+      localStorage.setItem('tiger_ambient_type', type);
+    } catch (e) {}
+
+    if (type === 'none' || this.isMuted) {
+      this.stopAmbient();
+      return;
+    }
+
+    this.startAmbient(type);
+  }
+
+  setAmbientVolume(vol) {
+    this.ambientVolume = Math.max(0, Math.min(1, vol));
+    try {
+      localStorage.setItem('tiger_ambient_volume', String(this.ambientVolume));
+    } catch (e) {}
+
+    if (this.ambientMasterGain && this.ctx) {
+      this.ambientMasterGain.gain.setTargetAtTime(this.ambientVolume * 0.35, this.ctx.currentTime, 0.05);
+    }
+  }
+
+  stopAmbient() {
+    if (this.ambientCrackleInterval) {
+      clearInterval(this.ambientCrackleInterval);
+      this.ambientCrackleInterval = null;
+    }
+    if (this.ambientNodes) {
+      this.ambientNodes.forEach(node => {
+        try {
+          if (node.stop) node.stop();
+          node.disconnect();
+        } catch (e) {}
+      });
+      this.ambientNodes = [];
+    }
+  }
+
+  startAmbient(type) {
+    this.stopAmbient();
+    this.init();
+    if (!this.ctx) return;
+
+    if (!this.ambientVolume) {
+      this.ambientVolume = 0.4;
+      try {
+        const saved = localStorage.getItem('tiger_ambient_volume');
+        if (saved !== null) this.ambientVolume = parseFloat(saved);
+      } catch (e) {}
+    }
+
+    this.ambientMasterGain = this.ctx.createGain();
+    this.ambientMasterGain.gain.setValueAtTime(this.ambientVolume * 0.35, this.ctx.currentTime);
+    this.ambientMasterGain.connect(this.ctx.destination);
+    this.ambientNodes = [this.ambientMasterGain];
+
+    const noiseBuffer = this.createNoiseBuffer();
+    if (!noiseBuffer) return;
+
+    const noiseSource = this.ctx.createBufferSource();
+    noiseSource.buffer = noiseBuffer;
+    noiseSource.loop = true;
+    this.ambientNodes.push(noiseSource);
+
+    if (type === 'rain') {
+      // Rain: Lowpass filter + subtle gentle highpass
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(900, this.ctx.currentTime);
+
+      const highpass = this.ctx.createBiquadFilter();
+      highpass.type = 'highpass';
+      highpass.frequency.setValueAtTime(250, this.ctx.currentTime);
+
+      noiseSource.connect(highpass);
+      highpass.connect(filter);
+      filter.connect(this.ambientMasterGain);
+      this.ambientNodes.push(filter, highpass);
+      noiseSource.start();
+
+    } else if (type === 'campfire') {
+      // Campfire: Deep low rumble + periodic randomized crackle impulses
+      const lowFilter = this.ctx.createBiquadFilter();
+      lowFilter.type = 'lowpass';
+      lowFilter.frequency.setValueAtTime(450, this.ctx.currentTime);
+
+      noiseSource.connect(lowFilter);
+      lowFilter.connect(this.ambientMasterGain);
+      this.ambientNodes.push(lowFilter);
+      noiseSource.start();
+
+      // Trigger crackles
+      this.ambientCrackleInterval = setInterval(() => {
+        if (!this.ctx || this.ambientType !== 'campfire') return;
+        if (Math.random() > 0.4) {
+          const crackle = this.ctx.createOscillator();
+          const crackleGain = this.ctx.createGain();
+          crackle.type = 'triangle';
+          crackle.frequency.setValueAtTime(200 + Math.random() * 800, this.ctx.currentTime);
+
+          crackleGain.gain.setValueAtTime(this.ambientVolume * 0.25, this.ctx.currentTime);
+          crackleGain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.025);
+
+          crackle.connect(crackleGain);
+          crackleGain.connect(this.ambientMasterGain);
+          crackle.start();
+          crackle.stop(this.ctx.currentTime + 0.03);
+        }
+      }, 180);
+
+    } else if (type === 'wind') {
+      // Wind: Resonant Bandpass with slow sine wave frequency modulation
+      const bandpass = this.ctx.createBiquadFilter();
+      bandpass.type = 'bandpass';
+      bandpass.frequency.setValueAtTime(400, this.ctx.currentTime);
+      bandpass.Q.setValueAtTime(3.0, this.ctx.currentTime);
+
+      // LFO for swaying breeze effect
+      const lfo = this.ctx.createOscillator();
+      const lfoGain = this.ctx.createGain();
+      lfo.frequency.setValueAtTime(0.18, this.ctx.currentTime); // slow sway
+      lfoGain.gain.setValueAtTime(220, this.ctx.currentTime);
+
+      lfo.connect(bandpass.frequency);
+      noiseSource.connect(bandpass);
+      bandpass.connect(this.ambientMasterGain);
+
+      this.ambientNodes.push(bandpass, lfo, lfoGain);
+      lfo.start();
+      noiseSource.start();
+
+    } else if (type === 'cafe') {
+      // Cafe: Warm low-mid noise + gentle acoustic drone
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(650, this.ctx.currentTime);
+
+      const drone = this.ctx.createOscillator();
+      const droneGain = this.ctx.createGain();
+      drone.type = 'sine';
+      drone.frequency.setValueAtTime(146.83, this.ctx.currentTime); // D3 warm drone
+      droneGain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+
+      drone.connect(droneGain);
+      droneGain.connect(this.ambientMasterGain);
+
+      noiseSource.connect(filter);
+      filter.connect(this.ambientMasterGain);
+
+      this.ambientNodes.push(filter, drone, droneGain);
+      drone.start();
+      noiseSource.start();
+    }
   }
 }
 
