@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiger & Friends Pomodoro</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐯</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="window-frame">
+    <!-- Custom Frameless Title Bar -->
+    <header class="title-bar">
+      <div class="title-left">
+        <span class="title-icon" id="titleIcon">🐯</span>
+        <span class="title-text" id="titleText">TORA TIMER</span>
+      </div>
+      <div class="title-controls">
+        <button class="icon-btn" id="pinBtn" title="Alltid øverst (Pin)">📌</button>
+        <button class="icon-btn" id="soundBtn" title="Lyd Av/På">🔔</button>
+        <button class="icon-btn" id="settingsBtn" title="Innstillinger (Språk, Skins & Lyd)">⚙️</button>
+        <button class="icon-btn" id="minBtn" title="Minimer">➖</button>
+        <button class="icon-btn close-btn" id="closeBtn" title="Lukk">✕</button>
+      </div>
+    </header>
+
+    <!-- Settings & Customization Modal Overlay -->
+    <div class="settings-modal" id="settingsModal">
+      <div class="settings-header">
+        <span class="settings-title" id="lblSettingsTitle">⚙️ INNSTILLINGER</span>
+        <button class="settings-close-btn" id="btnCloseSettings">✕</button>
+      </div>
+
+      <!-- Language Switcher Section -->
+      <div class="settings-section">
+        <div class="settings-section-title" id="lblLangSectionTitle">🌐 Språk / Language:</div>
+        <div class="lang-switch-group">
+          <button class="lang-btn active" data-lang="no">🇳🇴 Norsk</button>
+          <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+        </div>
+      </div>
+
+      <!-- Companion Skin Section -->
+      <div class="settings-section">
+        <div class="settings-section-title" id="lblSkinSectionTitle">🎨 Velg Skrivebordsvenn (Skin):</div>
+        <div class="modal-skin-grid">
+          <div class="modal-skin-card active" data-skin="tiger">
+            <span class="modal-skin-icon">🐯</span>
+            <div class="modal-skin-info">
+              <span class="modal-skin-title" id="cardTitleTiger">Tiger</span>
+              <span class="modal-skin-desc" id="cardDescTiger">Koselig tiger</span>
+            </div>
+          </div>
+          <div class="modal-skin-card" data-skin="hippo">
+            <span class="modal-skin-icon">🦛</span>
+            <div class="modal-skin-info">
+              <span class="modal-skin-title" id="cardTitleHippo">Flodhest</span>
+              <span class="modal-skin-desc" id="cardDescHippo">Rolig & chubby</span>
+            </div>
+          </div>
+          <div class="modal-skin-card" data-skin="pig">
+            <span class="modal-skin-icon">🐷</span>
+            <div class="modal-skin-info">
+              <span class="modal-skin-title" id="cardTitlePig">Gris</span>
+              <span class="modal-skin-desc" id="cardDescPig">Søt rosa muntergauk</span>
+            </div>
+          </div>
+          <div class="modal-skin-card" data-skin="guineapig">
+            <span class="modal-skin-icon">🐹</span>
+            <div class="modal-skin-info">
+              <span class="modal-skin-title" id="cardTitleGuineaPig">Marsvin</span>
+              <span class="modal-skin-desc" id="cardDescGuineaPig">Liten lodden potet</span>
+            </div>
+          </div>
+          <div class="modal-skin-card" data-skin="avocado">
+            <span class="modal-skin-icon">🥑</span>
+            <div class="modal-skin-info">
+              <span class="modal-skin-title" id="cardTitleAvocado">Avokado</span>
+              <span class="modal-skin-desc" id="cardDescAvocado">Frisk & fokusert</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sound Selection Section -->
+      <div class="settings-section">
+        <div class="settings-section-title" id="lblSoundSectionTitle">🔔 Velg Timer-Lyd:</div>
+        <div class="sound-selector-row">
+          <select class="sound-dropdown" id="selectSound">
+            <option value="chime">🔔 Melodisk Klokkespill</option>
+            <option value="retro">🕹️ 8-Bit Retro Arkade</option>
+            <option value="marimba">🪵 Varm Marimba / Kalimba</option>
+            <option value="digital">⏰ Digital Klokke (Beep)</option>
+            <option value="harp">✨ Magisk Harpe</option>
+          </select>
+          <button class="sound-preview-btn" id="btnPreviewSound">▶ Test</button>
+        </div>
+      </div>
+
+      <!-- Volume Section -->
+      <div class="settings-section">
+        <div class="settings-section-title" id="lblVolumeSectionTitle">🔊 Lydstyrke:</div>
+        <div class="volume-control-box">
+          <span>🔈</span>
+          <input type="range" class="volume-slider" id="sliderVolume" min="0" max="100" value="60">
+          <span class="volume-percent" id="lblVolumePercent">60%</span>
+        </div>
+      </div>
+
+      <button class="settings-done-btn" id="btnDoneSettings">✓ Ferdig & Lagre</button>
+    </div>
+
+    <!-- App Body Content -->
+    <main class="app-content">
+      <!-- Quick Skin Switcher Bar -->
+      <div class="skin-bar">
+        <button class="skin-btn active" data-skin="tiger" title="Tiger">🐯 <span class="skin-name" id="btnNameTiger">Tiger</span></button>
+        <button class="skin-btn" data-skin="hippo" title="Flodhest">🦛 <span class="skin-name" id="btnNameHippo">Flodhest</span></button>
+        <button class="skin-btn" data-skin="pig" title="Gris">🐷 <span class="skin-name" id="btnNamePig">Gris</span></button>
+        <button class="skin-btn" data-skin="guineapig" title="Marsvin">🐹 <span class="skin-name" id="btnNameGuineaPig">Marsvin</span></button>
+        <button class="skin-btn" data-skin="avocado" title="Avokado">🥑 <span class="skin-name" id="btnNameAvocado">Avokado</span></button>
+      </div>
+
+      <!-- Companion Arena -->
+      <section class="tiger-stage">
+        <div class="speech-bubble" id="speechBubble">
+          <span id="speechIcon">🎧</span>
+          <span id="speechText">Klar til fokus med Tiger!</span>
+        </div>
+        
+        <!-- Scaled Pixel Canvas (32x32 rendered at 160x160) -->
+        <canvas id="tigerCanvas" width="160" height="160" title="Klikk for å kose med vennen din!"></canvas>
+
+        <!-- Session Paw Tracker -->
+        <div class="session-tracker">
+          <span class="paw-dot" id="paw0">🐾</span>
+          <span class="paw-dot" id="paw1">🐾</span>
+          <span class="paw-dot" id="paw2">🐾</span>
+          <span class="paw-dot" id="paw3">🐾</span>
+          <span class="session-label" id="sessionLabel">0/4</span>
+        </div>
+      </section>
+
+      <!-- Digital Timer Display Box -->
+      <section class="timer-card">
+        <div class="timer-digits-container">
+          <div class="timer-digits" id="timerDigits">25:00</div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Preset Selection -->
+      <section class="presets-container">
+        <button class="preset-btn active" data-preset="focus" id="presetFocusBtn">25m<br>Fokus</button>
+        <button class="preset-btn" data-preset="shortBreak" id="presetShortBtn">5m<br>Kort</button>
+        <button class="preset-btn" data-preset="longBreak" id="presetLongBtn">15m<br>Lang</button>
+        <button class="preset-btn" data-preset="deep" id="presetDeepBtn">50m<br>Dyp</button>
+      </section>
+
+      <!-- Manual Custom Duration Configuration (HH:MM:SS) -->
+      <section class="custom-time-container">
+        <span class="custom-time-label" id="lblCustomTime">Egendefinert:</span>
+        <div class="custom-inputs-group">
+          <div class="time-input-box">
+            <input type="number" id="inputHours" min="0" max="99" value="00" placeholder="00">
+            <span class="time-unit-label" id="lblUnitHour">TIME</span>
+          </div>
+          <span class="colon-separator">:</span>
+          <div class="time-input-box">
+            <input type="number" id="inputMinutes" min="0" max="59" value="25" placeholder="25">
+            <span class="time-unit-label" id="lblUnitMin">MIN</span>
+          </div>
+          <span class="colon-separator">:</span>
+          <div class="time-input-box">
+            <input type="number" id="inputSeconds" min="0" max="59" value="00" placeholder="00">
+            <span class="time-unit-label" id="lblUnitSec">SEK</span>
+          </div>
+        </div>
+        <button class="custom-set-btn" id="btnSetCustom">Sett</button>
+      </section>
+
+      <!-- Main Action Controls -->
+      <section class="controls-container">
+        <button class="control-btn btn-secondary" id="btnReset" title="Tilbakestill timer">↺</button>
+        <button class="control-btn btn-primary" id="btnToggle">
+          <span id="btnToggleIcon">▶</span>
+          <span id="btnToggleText">START</span>
+        </button>
+        <button class="control-btn btn-secondary" id="btnSkip" title="Hopp til neste runde">⏭</button>
+      </section>
+
+      <!-- Bottom Hint Bar -->
+      <footer class="bottom-info-bar">
+        <span id="lblPetHint">🐾 Klikk på vennen for kos</span>
+        <span class="sound-test-link" id="btnSoundTest">Test lyd ♫</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="i18n.js"></script>
+  <script src="tiger.js"></script>
+  <script src="audio.js"></script>
+  <script src="timer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

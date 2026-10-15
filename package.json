@@ -1,0 +1,42 @@
+{
+  "name": "tiger-pomodoro",
+  "productName": "Tiger Pomodoro",
+  "version": "1.0.0",
+  "description": "Adorable Pixel Art Tiger Pomodoro Timer Desktop App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:exe": "electron-builder --win portable",
+    "build:installer": "electron-builder --win nsis",
+    "build:dir": "electron-builder --dir"
+  },
+  "keywords": [
+    "pomodoro",
+    "timer",
+    "pixel-art",
+    "tiger",
+    "desktop",
+    "electron"
+  ],
+  "author": "Tiger Pomodoro Team",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^44.7.2",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.tigerpomodoro.deskbuddy",
+    "productName": "Tiger Pomodoro",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "portable"
+      ]
+    },
+    "portable": {
+      "artifactName": "Tiger-Pomodoro-Windows.exe"
+    }
+  }
+}
